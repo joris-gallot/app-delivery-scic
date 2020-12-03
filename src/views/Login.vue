@@ -19,6 +19,10 @@
         >
       </div>
 
+      <p class="text-red-500 text-sm">
+        {{ error }}
+      </p>
+
       <p>
         Pas de compte ?
         <router-link :to="{ name: 'register' }">
@@ -35,17 +39,29 @@ export default {
     return {
       email: null,
       password: null,
+      error: null,
     }
   },
 
   methods: {
     async submit() {
-      const res = await this.$api.auth.login({
-        email: this.email,
-        password: this.password,
-      })
-      this.$store.dispatch('setUser', res.user)
-      this.$store.dispatch('setToken', res.token)
+      try {
+        const res = await this.$api.auth.login({
+          email: this.email,
+          password: this.password,
+        })
+        this.$store.dispatch('setUser', res.user)
+        this.$store.dispatch('setToken', res.token)
+        this.$router.push({ name: 'home' })
+      } catch (error) {
+        if (error.response.data.statusCode === 500) {
+          this.error = 'Utilisateur inconnu.'
+        } else if (error.response.data.statusCode === 400) {
+          this.error = 'Email ou mot de passe incorrect.'
+        } else {
+          this.error = error.response.data.message
+        }
+      }
     },
   },
 

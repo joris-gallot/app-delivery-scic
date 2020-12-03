@@ -23,6 +23,10 @@
         >
       </div>
 
+      <p class="text-red-500 text-sm">
+        {{ error }}
+      </p>
+
       <p>
         Déjà un compte ?
         <router-link :to="{ name: 'login' }">
@@ -40,17 +44,27 @@ export default {
       email: null,
       password: null,
       confirmPassword: null,
+      error: null,
     }
   },
 
   methods: {
     async submit() {
-      const res = await this.$api.auth.register({
-        email: this.email,
-        password: this.password,
-      })
-      this.$store.dispatch('setUser', res.user)
-      this.$store.dispatch('setToken', res.token)
+      try {
+        const res = await this.$api.auth.register({
+          email: this.email,
+          password: this.password,
+        })
+        this.$store.dispatch('setUser', res.user)
+        this.$store.dispatch('setToken', res.token)
+        this.$router.push({ name: 'home' })
+      } catch (error) {
+        if (error.response.data.statusCode === 422) {
+          this.error = 'Email déjà utilisée.'
+        } else {
+          this.error = error.response.data.message
+        }
+      }
     },
   },
 
