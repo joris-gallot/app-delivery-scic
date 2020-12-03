@@ -1,4 +1,4 @@
-# vue tailwind fontawesome boilerplate
+# Santa Clauss International Corporation delivery application
 
 ## Project setup
 ```
