@@ -14,7 +14,9 @@
       </b-field>
 
       <div class="flex flex-row-reverse">
-        <b-button :disabled="!formIsValid" type="is-success">Valider</b-button>
+        <b-button @click="submit" :disabled="!formIsValid" type="is-success"
+          >Valider</b-button
+        >
       </div>
 
       <p>
@@ -34,6 +36,17 @@ export default {
       email: null,
       password: null,
     }
+  },
+
+  methods: {
+    async submit() {
+      const res = await this.$api.auth.login({
+        email: this.email,
+        password: this.password,
+      })
+      this.$store.dispatch('setUser', res.user)
+      this.$store.dispatch('setToken', res.token)
+    },
   },
 
   computed: {
