@@ -8,10 +8,11 @@ import store from './store'
 import Api from './services'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import * as SolidIcons from '@fortawesome/free-solid-svg-icons'
+import * as RegularIcons from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faUserSecret)
+library.add(RegularIcons.faHeart, SolidIcons.faHeart)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
